@@ -38,17 +38,26 @@ namespace Tiny_Compiler
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button_Click_1(object sender, EventArgs e)
+        {
+            string code = textBox1.Text; 
+            Tiny_Compiler.Start_Compiling(code);
+            PrintTokens();
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
         {
 
         }
-         /*  void PrintLexemes()
-        {
-        for (int i = 0; i < Tiny_Compiler.Lexemes.Count; i++)
-        {
-        textBox2.Text += Tiny_Compiler.Lexemes.ElementAt(i);
-        textBox2.Text += Environment.NewLine;
-        }
-        }*/
+
+       
+        /*  void PrintLexemes()
+{
+for (int i = 0; i < Tiny_Compiler.Lexemes.Count; i++)
+{
+textBox2.Text += Tiny_Compiler.Lexemes.ElementAt(i);
+textBox2.Text += Environment.NewLine;
+}
+}*/
     }
 }
