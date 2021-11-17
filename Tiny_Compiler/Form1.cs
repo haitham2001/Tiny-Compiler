@@ -47,10 +47,16 @@ namespace Tiny_Compiler
 
         private void button1_Click_2(object sender, EventArgs e)
         {
+            dataGridView1.DataSource = null;
+            dataGridView1.Rows.Clear();            
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
 
         }
 
-       
+
         /*  void PrintLexemes()
 {
 for (int i = 0; i < Tiny_Compiler.Lexemes.Count; i++)

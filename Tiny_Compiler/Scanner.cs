@@ -8,9 +8,10 @@ public enum Token_Class
 {
     END, ENDL, ELSE, ELSEIF, IF, INTEGER,
     READ, THEN, REPEAT, UNTIL, WRITE, RETURN, FLOAT, STRING,
-    Equal, LessThan, GreaterThan, NotEqual
-    //Dot, Semicolon, Comma, LParanthesis, RParanthesis, EqualOp, LessThanOp,
-    //GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp,
+    Equal, LessThan, GreaterThan, NotEqual,
+    Plus, Minus, Multiply, Divide,
+    And, Or
+    //Dot, Semicolon, Comma, LParanthesis, RParanthesis,
     //Idenifier, Constant
 }
 namespace Tiny_Compiler
@@ -50,22 +51,18 @@ namespace Tiny_Compiler
             Operators.Add("<", Token_Class.LessThan);
             Operators.Add(">", Token_Class.GreaterThan);
             Operators.Add("<>", Token_Class.NotEqual);
+            Operators.Add("+", Token_Class.Plus);
+            Operators.Add("-", Token_Class.Minus);
+            Operators.Add("*", Token_Class.Multiply);
+            Operators.Add("/", Token_Class.Divide);
+            Operators.Add("&&", Token_Class.And);
+            Operators.Add("||", Token_Class.Or);
             //Operators.Add(".", Token_Class.Dot);
             //Operators.Add(";", Token_Class.Semicolon);
             //Operators.Add(",", Token_Class.Comma);
             //Operators.Add("(", Token_Class.LParanthesis);
             //Operators.Add(")", Token_Class.RParanthesis);
-            //Operators.Add("=", Token_Class.EqualOp);
-            //Operators.Add("<", Token_Class.LessThanOp);
-            //Operators.Add(">", Token_Class.GreaterThanOp);
             //Operators.Add("!", Token_Class.NotEqualOp);
-            //Operators.Add("+", Token_Class.PlusOp);
-            //Operators.Add("-", Token_Class.MinusOp);
-            //Operators.Add("*", Token_Class.MultiplyOp);
-            //Operators.Add("/", Token_Class.DivideOp);
-
-
-
         }
 
         public void StartScanning(string SourceCode)
@@ -117,9 +114,26 @@ namespace Tiny_Compiler
                 }
                 else if (CurrentChar == '=' || CurrentChar == '>')
                 {
-
                     check += CurrentChar.ToString();
                     FindTokenClass(check);
+                }
+                else if (CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '/' || CurrentChar == '*')
+                {
+                    check += CurrentChar.ToString();
+                    FindTokenClass(check);
+                }
+                else if (char.IsSymbol(CurrentChar))
+                {
+                    while (char.IsSymbol(CurrentChar))
+                    {
+                        check += CurrentChar.ToString();
+                        j++;
+                        if (j >= SourceCode.Length)
+                            break;
+                        CurrentChar = SourceCode[j];
+                    }
+                    FindTokenClass(check);
+                    i = j - 1;
                 }
                 else
                 {
@@ -149,7 +163,7 @@ namespace Tiny_Compiler
 
             //Is it an operator?
             if (Operators.ContainsKey(Lex))
-            {
+            {               
                 Tok.token_type = Operators[Lex];
                 Tokens.Add(Tok);
             }
