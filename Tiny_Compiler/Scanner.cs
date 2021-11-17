@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 public enum Token_Class
 {
     END, ENDL, ELSE, ELSEIF, IF, INTEGER,
-    READ, THEN, REPEAT, UNTIL, WRITE, RETURN, FLOAT, STRING,
-    Equal, LessThan, GreaterThan, NotEqual,
-    Plus, Minus, Multiply, Divide,
-    And, Or
-    //Dot, Semicolon, Comma, LParanthesis, RParanthesis,
-    //Idenifier, Constant
+    READ, THEN, REPEAT, UNTIL, WRITE, RETURN, FLOAT, STRING, LessThan, GreaterThan, NotEqual,
+    Plus, Minus, Multiply, Divide, Equal,LeftBraces,RightBraces,
+    And, Or, Semicolon, Identifier,Assign,Comment
+    //Dot, Comma, LParanthesis, RParanthesis,
+    //Constant
 }
 namespace Tiny_Compiler
 {
@@ -32,6 +32,7 @@ namespace Tiny_Compiler
 
         public Scanner()
         {
+
             ReservedWords.Add("if", Token_Class.IF);
             ReservedWords.Add("end", Token_Class.END);
             ReservedWords.Add("endl", Token_Class.ENDL);
@@ -57,12 +58,15 @@ namespace Tiny_Compiler
             Operators.Add("/", Token_Class.Divide);
             Operators.Add("&&", Token_Class.And);
             Operators.Add("||", Token_Class.Or);
+            Operators.Add(":=", Token_Class.Assign);
             //Operators.Add(".", Token_Class.Dot);
-            //Operators.Add(";", Token_Class.Semicolon);
+            Operators.Add(";", Token_Class.Semicolon);
             //Operators.Add(",", Token_Class.Comma);
             //Operators.Add("(", Token_Class.LParanthesis);
             //Operators.Add(")", Token_Class.RParanthesis);
-            //Operators.Add("!", Token_Class.NotEqualOp);
+            Operators.Add("{", Token_Class.LeftBraces);
+            Operators.Add("}", Token_Class.RightBraces);
+
         }
 
         public void StartScanning(string SourceCode)
@@ -73,7 +77,7 @@ namespace Tiny_Compiler
                 char CurrentChar = SourceCode[i];
                 string CurrentLexeme = CurrentChar.ToString();
                 string check = "";
-                
+
                 if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n')
                     continue;
                 if (char.IsLetter(CurrentChar))
@@ -98,23 +102,69 @@ namespace Tiny_Compiler
                 {
 
                 }
+                else if (CurrentChar == ':')
+                {
+
+                    if (SourceCode[j + 1] == '=')
+                    {
+
+                        for (int m = 0; m <= 1; m++)
+                        {
+                            check += CurrentChar.ToString();
+                            if (m != 1)
+                            {
+                                j++;
+                                CurrentChar = SourceCode[j];
+                            }
+                        }
+                        i = j;
+                    }
+
+                    FindTokenClass(check);
+                }
                 else if (CurrentChar == '<')
                 {
-                    while (true)
+
+                    check += CurrentChar.ToString();
+                    j++;
+                    CurrentChar = SourceCode[j];
+                    if (SourceCode[j] == '>')
                     {
                         check += CurrentChar.ToString();
-                        j++;
-                        if (j >= SourceCode.Length)
-                            break;
-                        CurrentChar = SourceCode[j];
-
+                        i = j;
                     }
+
                     FindTokenClass(check);
-                    i = j - 1;
+
                 }
                 else if (CurrentChar == '=' || CurrentChar == '>')
                 {
                     check += CurrentChar.ToString();
+                    FindTokenClass(check);
+                }
+                else if (CurrentChar == '/' && SourceCode[j + 1] == '*')
+                {
+
+                    while (true)
+                    {
+                        check += CurrentChar.ToString();
+                        j++;
+                        
+                        if (j >= SourceCode.Length)
+                            break;
+                        CurrentChar = SourceCode[j];
+                        if (CurrentChar == '*' && SourceCode[j + 1] == '/')
+                        {
+                            check += CurrentChar.ToString();
+                            check += SourceCode[j + 1].ToString();
+                            break;
+                        }
+                        
+
+                    }
+
+
+                    i = j+1;
                     FindTokenClass(check);
                 }
                 else if (CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '/' || CurrentChar == '*')
@@ -137,7 +187,7 @@ namespace Tiny_Compiler
                 }
                 else
                 {
-
+                    Errors.Error_List.Add(CurrentChar.ToString());
                 }
 
             }
@@ -146,7 +196,6 @@ namespace Tiny_Compiler
         }
         void FindTokenClass(string Lex)
         {
-            Token_Class TC;
             Token Tok = new Token();
             Tok.lex = Lex;
             //Is it a reserved word?
@@ -154,29 +203,44 @@ namespace Tiny_Compiler
             {
                 Tok.token_type = ReservedWords[Lex];
                 Tokens.Add(Tok);
+
             }
-
-            //Is it an identifier?
-
+            else if (isIdentifier(Lex))
+            {
+                Tok.token_type = Token_Class.Identifier;
+                Tokens.Add(Tok);
+            }
+            else if (isComment(Lex))
+            {
+                Tok.token_type = Token_Class.Comment;
+                Tokens.Add(Tok);
+            }
 
             //Is it a Constant?
 
             //Is it an operator?
-            if (Operators.ContainsKey(Lex))
-            {               
+            else if (Operators.ContainsKey(Lex))
+            {
                 Tok.token_type = Operators[Lex];
                 Tokens.Add(Tok);
             }
-            //Is it an undefined?
+            else
+            {
+                Errors.Error_List.Add(Lex);
+            }
+
         }
 
 
 
         bool isIdentifier(string lex)
         {
-            bool isValid = true;
-            // Check if the lex is an identifier or not.
-
+            bool isValid = false;
+            var iden_reg = new Regex("^[A-Za-z]([A-Za-z0-9])*$", RegexOptions.Compiled);
+            if (iden_reg.IsMatch(lex))
+            {
+                isValid = true;
+            }
             return isValid;
         }
         bool isConstant(string lex)
@@ -184,6 +248,17 @@ namespace Tiny_Compiler
             bool isValid = true;
             // Check if the lex is a constant (Number) or not.
 
+            return isValid;
+        }
+
+        bool isComment(string lex)
+        {
+            bool isValid = false;
+            var word_reg = new Regex("^(/\\*).*(\\*/)$", RegexOptions.Compiled);
+            if (word_reg.IsMatch(lex))
+            {
+                isValid = true;
+            }
             return isValid;
         }
     }

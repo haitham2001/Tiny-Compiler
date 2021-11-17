@@ -43,12 +43,14 @@ namespace Tiny_Compiler
             string code = textBox1.Text; 
             Tiny_Compiler.Start_Compiling(code);
             PrintTokens();
+            PrintErrors();
         }
 
         private void button1_Click_2(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();            
+            
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -56,14 +58,17 @@ namespace Tiny_Compiler
 
         }
 
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
 
-        /*  void PrintLexemes()
-{
-for (int i = 0; i < Tiny_Compiler.Lexemes.Count; i++)
-{
-textBox2.Text += Tiny_Compiler.Lexemes.ElementAt(i);
-textBox2.Text += Environment.NewLine;
-}
-}*/
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+
+        
     }
 }
