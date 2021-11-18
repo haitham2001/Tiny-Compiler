@@ -36,12 +36,8 @@ namespace Tiny_Compiler
         {
             for (int i = 0; i < Errors.Error_List.Count; i++)
             {
-                //if(!(Errors.Error_List[i].ToString().Equals(" ")))
-                //{
-                    textBox2.Text += "Unrecognized Token";
-                    textBox2.Text += "\t\t";
-                //}
-                
+                textBox2.Text += "Unrecognized Token";
+                textBox2.Text += "\t\t";
                 textBox2.Text += Errors.Error_List[i];
                 textBox2.Text += "\r\n";
             }
@@ -64,13 +60,6 @@ namespace Tiny_Compiler
             Tiny_Compiler.TokenStream.Clear();
             dataGridView1.Rows.Clear();
             textBox2.Clear();
-            //foreach (DataGridViewRow row in dataGridView1.Rows)
-            //{
-            //    foreach (DataGridViewCell cell in row.Cells)
-            //    {
-            //        cell.Value = "";
-            //    }
-            //}
 
         }
 
