@@ -49,7 +49,9 @@ namespace Tiny_Compiler
 
         private void button_Click_1(object sender, EventArgs e)
         {
-            string code = textBox1.Text; 
+            string code = textBox1.Text;
+            Tiny_Compiler.TokenStream.Clear();
+            Errors.Error_List.Clear();
             Tiny_Compiler.Start_Compiling(code);
             PrintTokens();
             PrintErrors();
@@ -58,6 +60,8 @@ namespace Tiny_Compiler
         private void button1_Click_2(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
+            Errors.Error_List.Clear();
+            Tiny_Compiler.TokenStream.Clear();
             dataGridView1.Rows.Clear();
             textBox2.Clear();
             //foreach (DataGridViewRow row in dataGridView1.Rows)

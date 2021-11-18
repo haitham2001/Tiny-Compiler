@@ -75,7 +75,7 @@ namespace Tiny_Compiler
             {
                 int j = i;
                 char CurrentChar = SourceCode[i];
-                string CurrentLexeme = CurrentChar.ToString();
+                //string CurrentLexeme = CurrentChar.ToString();
                 string check = "";
 
                 if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n')
@@ -89,13 +89,12 @@ namespace Tiny_Compiler
                         if (j >= SourceCode.Length)
                             break;
                         CurrentChar = SourceCode[j];
-
                     }
                     FindTokenClass(check);
                     i = j - 1;
                 }
 
-                //number
+                //For Number
                 else if (CurrentChar >= '0' && CurrentChar <= '9')
                 {
                     while (char.IsNumber(CurrentChar) || CurrentChar == '.')
@@ -105,31 +104,31 @@ namespace Tiny_Compiler
                         if (j >= SourceCode.Length)
                             break;
                         CurrentChar = SourceCode[j];
-
                     }
                     FindTokenClass(check);
                     i = j - 1;
                 }
 
+                //For Strings
                 else if (CurrentChar == '\"')
-                {
-                    check += CurrentChar.ToString();
+                {                                         
+                    check += CurrentChar.ToString();                    
                     j++;
                     CurrentChar = SourceCode[j];
                     while (CurrentChar != '\"')
                     {
                         check += CurrentChar.ToString();
-                        j++;
-                        if (j == SourceCode.Length)
-                        {
-                            break;
-                        }
+                        if (j + 1 >= SourceCode.Length || SourceCode[j + 1] == '\n' 
+                            || SourceCode[j + 1] == '\r')                        
+                            break;                        
+                        j++;                                                 
                         CurrentChar = SourceCode[j];
                     }
                     if (CurrentChar == '\"')
                         check += CurrentChar.ToString();
+
                     FindTokenClass(check);
-                    i = j + 1;
+                    i = j;
                 }
 
                 else if (CurrentChar == '.')
@@ -162,21 +161,15 @@ namespace Tiny_Compiler
                     CurrentChar = SourceCode[j];
                     FindTokenClass(check);
                     i = j - 1;
-                }
-                else if (CurrentChar >= '0' && CurrentChar <= '9')
-                {
-
-                }
+                }              
                 else if (CurrentChar == '{')
                 {
 
                 }
                 else if (CurrentChar == ':')
                 {
-
                     if (SourceCode[j + 1] == '=')
                     {
-
                         for (int m = 0; m <= 1; m++)
                         {
                             check += CurrentChar.ToString();
@@ -202,7 +195,6 @@ namespace Tiny_Compiler
                         check += CurrentChar.ToString();
                         i = j;
                     }
-
                     FindTokenClass(check);
 
                 }
@@ -213,7 +205,6 @@ namespace Tiny_Compiler
                 }
                 else if (CurrentChar == '/' && SourceCode[j + 1] == '*')
                 {
-
                     while (true)
                     {
                         check += CurrentChar.ToString();
@@ -227,13 +218,9 @@ namespace Tiny_Compiler
                             check += CurrentChar.ToString();
                             check += SourceCode[j + 1].ToString();
                             break;
-                        }
-                        
-
+                        }                      
                     }
-
-
-                    i = j+1;
+                    i = j + 1;
                     FindTokenClass(check);
                 }
                 else if (CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '/' || CurrentChar == '*')
@@ -256,9 +243,8 @@ namespace Tiny_Compiler
                 }
                 else
                 {
-                        Errors.Error_List.Add(CurrentChar.ToString());
+                    Errors.Error_List.Add(CurrentChar.ToString());
                 }
-
             }
 
             Tiny_Compiler.TokenStream = Tokens;
@@ -267,18 +253,22 @@ namespace Tiny_Compiler
         {
             Token Tok = new Token();
             Tok.lex = Lex;
+
             //Is it a reserved word?
             if (ReservedWords.ContainsKey(Lex))
             {
                 Tok.token_type = ReservedWords[Lex];
                 Tokens.Add(Tok);
-
             }
+
+            //Is it an identifier
             else if (isIdentifier(Lex))
             {
                 Tok.token_type = Token_Class.Identifier;
                 Tokens.Add(Tok);
             }
+
+            //Is it a Comment
             else if (isComment(Lex))
             {
                 Tok.token_type = Token_Class.Comment;
@@ -292,14 +282,14 @@ namespace Tiny_Compiler
                 Tokens.Add(Tok);
             }
 
-            //is it a string
+            //is it a String
             else if (isString(Lex))
             {
                 Tok.token_type = Token_Class.String;
                 Tokens.Add(Tok);
             }
 
-            //Is it an operator?
+            //Is it an Operator?
             else if (Operators.ContainsKey(Lex))
             {
                 Tok.token_type = Operators[Lex];
@@ -338,7 +328,7 @@ namespace Tiny_Compiler
         bool isNumber(string lex)
         {
             bool isValid = false;
-            // Check if the lex is a constat (Number) or not.
+            // Check if the lex is a constant (Number) or not.
             var regx = new Regex(@"^[0-9]+(\.[0-9]+)?$", RegexOptions.Compiled);
             if (regx.IsMatch(lex))
             {
