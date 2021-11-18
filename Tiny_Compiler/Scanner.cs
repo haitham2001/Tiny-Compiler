@@ -78,7 +78,7 @@ namespace Tiny_Compiler
                 char CurrentChar = SourceCode[i];
                 string check = "";
                
-                if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n')
+                if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n'||CurrentChar=='\t')
                     continue;
                 if (char.IsLetter(CurrentChar))
                 {
@@ -158,7 +158,7 @@ namespace Tiny_Compiler
                     }
                     else
                     {
-                        Errors.Error_List.Add(CurrentChar.ToString());
+                            Errors.Error_List.Add(CurrentChar.ToString());
                     }
 
                 }
@@ -184,7 +184,7 @@ namespace Tiny_Compiler
                     }
                     else
                     {
-                        Errors.Error_List.Add(CurrentChar.ToString());
+                            Errors.Error_List.Add(CurrentChar.ToString());
                     }
 
                 }
