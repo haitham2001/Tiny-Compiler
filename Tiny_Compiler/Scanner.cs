@@ -10,7 +10,7 @@ public enum Token_Class
     END, ENDL, ELSE, ELSEIF, IF, INTEGER,
     READ, THEN, REPEAT, UNTIL, WRITE, RETURN, FLOAT, STRING, LessThan, GreaterThan, NotEqual,
     Plus, Minus, Multiply, Divide, Equal,LeftBraces,RightBraces,
-    And, Or, Semicolon, Identifier,Assign,Comment, Comma, Dot
+    And, Or, Semicolon, Identifier,Assign,Comment, Comma, Dot, Number, String
     // LParanthesis, RParanthesis,
     //Constant
 }
@@ -94,6 +94,44 @@ namespace Tiny_Compiler
                     FindTokenClass(check);
                     i = j - 1;
                 }
+
+                //number
+                else if (CurrentChar >= '0' && CurrentChar <= '9')
+                {
+                    while (char.IsNumber(CurrentChar) || CurrentChar == '.')
+                    {
+                        check += CurrentChar.ToString();
+                        j++;
+                        if (j >= SourceCode.Length)
+                            break;
+                        CurrentChar = SourceCode[j];
+
+                    }
+                    FindTokenClass(check);
+                    i = j - 1;
+                }
+
+                else if (CurrentChar == '\"')
+                {
+                    check += CurrentChar.ToString();
+                    j++;
+                    CurrentChar = SourceCode[j];
+                    while (CurrentChar != '\"')
+                    {
+                        check += CurrentChar.ToString();
+                        j++;
+                        if (j == SourceCode.Length)
+                        {
+                            break;
+                        }
+                        CurrentChar = SourceCode[j];
+                    }
+                    if (CurrentChar == '\"')
+                        check += CurrentChar.ToString();
+                    FindTokenClass(check);
+                    i = j + 1;
+                }
+
                 else if (CurrentChar == '.')
                 {
                     check += CurrentChar.ToString();
@@ -248,6 +286,18 @@ namespace Tiny_Compiler
             }
 
             //Is it a Constant?
+            else if (isNumber(Lex))
+            {
+                Tok.token_type = Token_Class.Number;
+                Tokens.Add(Tok);
+            }
+
+            //is it a string
+            else if (isString(Lex))
+            {
+                Tok.token_type = Token_Class.String;
+                Tokens.Add(Tok);
+            }
 
             //Is it an operator?
             else if (Operators.ContainsKey(Lex))
@@ -274,11 +324,26 @@ namespace Tiny_Compiler
             }
             return isValid;
         }
-        bool isConstant(string lex)
+        bool isString(string lex)
         {
-            bool isValid = true;
-            // Check if the lex is a constant (Number) or not.
+            bool isValid = false;
+            var str_regx = new Regex("^(\")([A-Za-z0-9])*(\")$", RegexOptions.Compiled);
+            if (str_regx.IsMatch(lex))
+            {
+                isValid = true;
+            }
+            return isValid;
+        }
 
+        bool isNumber(string lex)
+        {
+            bool isValid = false;
+            // Check if the lex is a constat (Number) or not.
+            var regx = new Regex(@"^[0-9]+(\.[0-9]+)?$", RegexOptions.Compiled);
+            if (regx.IsMatch(lex))
+            {
+                isValid = true;
+            }
             return isValid;
         }
 
