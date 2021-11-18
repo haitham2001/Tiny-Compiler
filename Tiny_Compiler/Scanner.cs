@@ -74,7 +74,7 @@ namespace Tiny_Compiler
             int num_LParanthesis_left = 0;
             for (int i = 0; i < SourceCode.Length; i++)
             {
-                int j = i;
+                
                 char CurrentChar = SourceCode[i];
                 string check = "";
                
@@ -85,13 +85,13 @@ namespace Tiny_Compiler
                     while (char.IsLetter(CurrentChar) || char.IsDigit(CurrentChar))
                     {
                         check += CurrentChar.ToString();
-                        j++;
-                        if (j >= SourceCode.Length)
+                        i++;
+                        if (i >= SourceCode.Length)
                             break;
-                        CurrentChar = SourceCode[j];
+                        CurrentChar = SourceCode[i];
                     }
                     FindTokenClass(check);
-                    i = j - 1;
+                    i = i - 1;
                 }
 
                 //For Number
@@ -100,35 +100,35 @@ namespace Tiny_Compiler
                     while (char.IsNumber(CurrentChar) || CurrentChar == '.')
                     {
                         check += CurrentChar.ToString();
-                        j++;
-                        if (j >= SourceCode.Length)
+                        i++;
+                        if (i >= SourceCode.Length)
                             break;
-                        CurrentChar = SourceCode[j];
+                        CurrentChar = SourceCode[i];
                     }
                     FindTokenClass(check);
-                    i = j - 1;
+                    i = i - 1;
                 }
 
                 //For Strings
                 else if (CurrentChar == '\"')
                 {
                     check += CurrentChar.ToString();
-                    j++;
-                    CurrentChar = SourceCode[j];
+                    i++;
+                    CurrentChar = SourceCode[i];
                     while (CurrentChar != '\"')
                     {
                         check += CurrentChar.ToString();
-                        if (j + 1 >= SourceCode.Length || SourceCode[j + 1] == '\n'
-                            || SourceCode[j + 1] == '\r')
+                        if (i + 1 >= SourceCode.Length || SourceCode[i + 1] == '\n'
+                            || SourceCode[i + 1] == '\r')
                             break;
-                        j++;
-                        CurrentChar = SourceCode[j];
+                        i++;
+                        CurrentChar = SourceCode[i];
                     }
                     if (CurrentChar == '\"')
                         check += CurrentChar.ToString();
 
                     FindTokenClass(check);
-                    i = j;
+   
                 }
 
                 else if (CurrentChar == '.'|| CurrentChar == ','|| CurrentChar == ';'|| CurrentChar == '=' || CurrentChar == '>')
@@ -143,7 +143,7 @@ namespace Tiny_Compiler
                     num_braces_left++;
                     check += CurrentChar.ToString();
 
-                    CurrentChar = SourceCode[j];
+                    CurrentChar = SourceCode[i];
                     FindTokenClass(check);
                 }
                 else if (CurrentChar == '}')
@@ -167,7 +167,7 @@ namespace Tiny_Compiler
 
                     num_LParanthesis_left++;
                     check += CurrentChar.ToString();
-                    CurrentChar = SourceCode[j];
+                    CurrentChar = SourceCode[i];
                     FindTokenClass(check);
 
                 }
@@ -178,7 +178,7 @@ namespace Tiny_Compiler
                         num_LParanthesis_left--;
                         check += CurrentChar.ToString();
                        
-                        CurrentChar = SourceCode[j];
+                        CurrentChar = SourceCode[i];
                         FindTokenClass(check);
                        
                     }
@@ -190,18 +190,18 @@ namespace Tiny_Compiler
                 }
                 else if (CurrentChar == ':')
                 {
-                    if (SourceCode[j + 1] == '=')
+                    if (SourceCode[i + 1] == '=')
                     {
                         for (int m = 0; m <= 1; m++)
                         {
                             check += CurrentChar.ToString();
                             if (m != 1)
                             {
-                                j++;
-                                CurrentChar = SourceCode[j];
+                                i++;
+                                CurrentChar = SourceCode[i];
                             }
                         }
-                        i = j;
+          
                     }
 
                     FindTokenClass(check);
@@ -210,35 +210,35 @@ namespace Tiny_Compiler
                 {
 
                     check += CurrentChar.ToString();
-                    j++;
-                    CurrentChar = SourceCode[j];
-                    if (SourceCode[j] == '>')
+                    i++;
+                    CurrentChar = SourceCode[i];
+                    if (SourceCode[i] == '>')
                     {
                         check += CurrentChar.ToString();
-                        i = j;
+     
                     }
                     FindTokenClass(check);
 
                 }
                 
-                else if (CurrentChar == '/' && SourceCode[j + 1] == '*')
+                else if (CurrentChar == '/' && SourceCode[i + 1] == '*')
                 {
                     while (true)
                     {
                         check += CurrentChar.ToString();
-                        j++;
+                        i++;
 
-                        if (j >= SourceCode.Length)
+                        if (i >= SourceCode.Length)
                             break;
-                        CurrentChar = SourceCode[j];
-                        if (CurrentChar == '*' && SourceCode[j + 1] == '/')
+                        CurrentChar = SourceCode[i];
+                        if (CurrentChar == '*' && SourceCode[i + 1] == '/')
                         {
                             check += CurrentChar.ToString();
-                            check += SourceCode[j + 1].ToString();
+                            check += SourceCode[i + 1].ToString();
                             break;
                         }
                     }
-                    i = j + 1;
+                    i = i + 1;
                     FindTokenClass(check);
                 }
                 else if (CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '/' || CurrentChar == '*')
@@ -251,13 +251,13 @@ namespace Tiny_Compiler
                     while (char.IsSymbol(CurrentChar))
                     {
                         check += CurrentChar.ToString();
-                        j++;
-                        if (j >= SourceCode.Length)
+                        i++;
+                        if (i >= SourceCode.Length)
                             break;
-                        CurrentChar = SourceCode[j];
+                        CurrentChar = SourceCode[i];
                     }
                     FindTokenClass(check);
-                    i = j - 1;
+                    i = i - 1;
                 }
                 else
                 {
