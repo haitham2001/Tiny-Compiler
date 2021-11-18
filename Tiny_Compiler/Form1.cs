@@ -25,7 +25,8 @@ namespace Tiny_Compiler
         {
             for (int i = 0; i < Tiny_Compiler.Tiny_Scanner.Tokens.Count; i++)
             {
-                if(Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type.ToString().Equals("INTEGER")|| Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type.ToString().Equals("FLOAT"))
+                if(Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type.ToString().Equals("INTEGER")|| Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type.ToString().Equals("FLOAT")||
+                    Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type.ToString().Equals("STRING"))
                     dataGridView1.Rows.Add(Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).lex, "Datatype ("+Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type+")");
                 else
                     dataGridView1.Rows.Add(Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).lex, Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type);
