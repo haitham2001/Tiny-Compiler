@@ -10,8 +10,8 @@ public enum Token_Class
     END, ENDL, ELSE, ELSEIF, IF, INTEGER,
     READ, THEN, REPEAT, UNTIL, WRITE, RETURN, FLOAT, STRING, LessThan, GreaterThan, NotEqual,
     Plus, Minus, Multiply, Divide, Equal,LeftBraces,RightBraces,
-    And, Or, Semicolon, Identifier,Assign,Comment
-    //Dot, Comma, LParanthesis, RParanthesis,
+    And, Or, Semicolon, Identifier,Assign,Comment, Comma, Dot
+    // LParanthesis, RParanthesis,
     //Constant
 }
 namespace Tiny_Compiler
@@ -59,9 +59,9 @@ namespace Tiny_Compiler
             Operators.Add("&&", Token_Class.And);
             Operators.Add("||", Token_Class.Or);
             Operators.Add(":=", Token_Class.Assign);
-            //Operators.Add(".", Token_Class.Dot);
+            Operators.Add(".", Token_Class.Dot);
             Operators.Add(";", Token_Class.Semicolon);
-            //Operators.Add(",", Token_Class.Comma);
+            Operators.Add(",", Token_Class.Comma);
             //Operators.Add("(", Token_Class.LParanthesis);
             //Operators.Add(")", Token_Class.RParanthesis);
             Operators.Add("{", Token_Class.LeftBraces);
@@ -91,6 +91,37 @@ namespace Tiny_Compiler
                         CurrentChar = SourceCode[j];
 
                     }
+                    FindTokenClass(check);
+                    i = j - 1;
+                }
+                else if (CurrentChar == '.')
+                {
+                    check += CurrentChar.ToString();
+                    j++;
+                    if (j >= SourceCode.Length)
+                        break;
+                    CurrentChar = SourceCode[j];
+                    FindTokenClass(check);
+                    i = j - 1;
+                }
+                else if (CurrentChar == ',')
+                {
+                        check += CurrentChar.ToString();
+                        j++;
+                        if (j >= SourceCode.Length)
+                            break;
+                        CurrentChar = SourceCode[j];
+                        FindTokenClass(check);
+                        i = j - 1;
+                }
+                
+                else if (CurrentChar == ';')
+                {
+                    check += CurrentChar.ToString();
+                    j++;
+                    if (j >= SourceCode.Length)
+                        break;
+                    CurrentChar = SourceCode[j];
                     FindTokenClass(check);
                     i = j - 1;
                 }
@@ -187,7 +218,7 @@ namespace Tiny_Compiler
                 }
                 else
                 {
-                    Errors.Error_List.Add(CurrentChar.ToString());
+                        Errors.Error_List.Add(CurrentChar.ToString());
                 }
 
             }

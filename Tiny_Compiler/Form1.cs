@@ -25,7 +25,10 @@ namespace Tiny_Compiler
         {
             for (int i = 0; i < Tiny_Compiler.Tiny_Scanner.Tokens.Count; i++)
             {
-                dataGridView1.Rows.Add(Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).lex, Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type);
+                if(Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type.ToString().Equals("INTEGER")|| Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type.ToString().Equals("FLOAT"))
+                    dataGridView1.Rows.Add(Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).lex, "Datatype ("+Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type+")");
+                else
+                    dataGridView1.Rows.Add(Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).lex, Tiny_Compiler.Tiny_Scanner.Tokens.ElementAt(i).token_type);
             }
         }
 
@@ -33,6 +36,12 @@ namespace Tiny_Compiler
         {
             for (int i = 0; i < Errors.Error_List.Count; i++)
             {
+                //if(!(Errors.Error_List[i].ToString().Equals(" ")))
+                //{
+                    textBox2.Text += "Unrecognized Token";
+                    textBox2.Text += "\t\t";
+                //}
+                
                 textBox2.Text += Errors.Error_List[i];
                 textBox2.Text += "\r\n";
             }
@@ -49,8 +58,16 @@ namespace Tiny_Compiler
         private void button1_Click_2(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
-            dataGridView1.Rows.Clear();            
-            
+            dataGridView1.Rows.Clear();
+            textBox2.Clear();
+            //foreach (DataGridViewRow row in dataGridView1.Rows)
+            //{
+            //    foreach (DataGridViewCell cell in row.Cells)
+            //    {
+            //        cell.Value = "";
+            //    }
+            //}
+
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
