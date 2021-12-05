@@ -57,8 +57,7 @@ namespace Tiny_Compiler
             Operators.Add("/", Token_Class.Division);
             Operators.Add("&&", Token_Class.And);
             Operators.Add("||", Token_Class.Or);
-            Operators.Add(":=", Token_Class.Assign);
-            Operators.Add(".", Token_Class.Dot);
+            Operators.Add(":=", Token_Class.Assign);           
             Operators.Add(";", Token_Class.Semicolon);
             Operators.Add(",", Token_Class.Comma);
             Operators.Add("(", Token_Class.LeftParentheses);
@@ -97,7 +96,7 @@ namespace Tiny_Compiler
                 //For Number
                 else if (CurrentChar >= '0' && CurrentChar <= '9')
                 {
-                    while (char.IsNumber(CurrentChar) || CurrentChar == '.')
+                    while (char.IsNumber(CurrentChar) || CurrentChar == '.' || char.IsLetter(CurrentChar))
                     {
                         check += CurrentChar.ToString();
                         i++;
@@ -128,14 +127,14 @@ namespace Tiny_Compiler
                         check += CurrentChar.ToString();
 
                     FindTokenClass(check);
-   
+
                 }
 
-                else if (CurrentChar == '.'|| CurrentChar == ','|| CurrentChar == ';'|| CurrentChar == '=' || CurrentChar == '>')
+                else if (CurrentChar == '.' || CurrentChar == ',' || CurrentChar == ';' || CurrentChar == '=' || CurrentChar == '>')
                 {
                     check += CurrentChar.ToString();
                     FindTokenClass(check);
-                    
+
                 }
                 else if (CurrentChar == '{')
                 {
@@ -152,13 +151,13 @@ namespace Tiny_Compiler
                     {
                         num_braces_left--;
                         check += CurrentChar.ToString();
-                  
+
                         FindTokenClass(check);
-                     
+
                     }
                     else
                     {
-                            Errors.Error_List.Add(CurrentChar.ToString());
+                        Errors.Error_List.Add(CurrentChar.ToString());
                     }
 
                 }
@@ -177,14 +176,14 @@ namespace Tiny_Compiler
                     {
                         num_LParanthesis_left--;
                         check += CurrentChar.ToString();
-                       
+
                         CurrentChar = SourceCode[i];
                         FindTokenClass(check);
-                       
+
                     }
                     else
                     {
-                            Errors.Error_List.Add(CurrentChar.ToString());
+                        Errors.Error_List.Add(CurrentChar.ToString());
                     }
 
                 }
@@ -201,7 +200,7 @@ namespace Tiny_Compiler
                                 CurrentChar = SourceCode[i];
                             }
                         }
-          
+
                     }
 
                     FindTokenClass(check);
@@ -215,7 +214,7 @@ namespace Tiny_Compiler
                     if (SourceCode[i] == '>')
                     {
                         check += CurrentChar.ToString();
-     
+
                     }
                     FindTokenClass(check);
 
@@ -238,11 +237,18 @@ namespace Tiny_Compiler
                             break;
                         }
                     }
-                    i = i + 1;
+                    i++;
                     FindTokenClass(check);
                 }
                 else if (CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '/' || CurrentChar == '*')
                 {
+                    check += CurrentChar.ToString();
+                    FindTokenClass(check);
+                }
+                else if (CurrentChar == '&' && SourceCode[i + 1] == '&') 
+                {
+                    check += CurrentChar.ToString();
+                    i++;
                     check += CurrentChar.ToString();
                     FindTokenClass(check);
                 }
@@ -358,7 +364,7 @@ namespace Tiny_Compiler
         bool isComment(string lex)
         {
             bool isValid = false;
-            var word_reg = new Regex("^(/\\*).*(\\*/)$", RegexOptions.Compiled);
+            var word_reg = new Regex(@"^(/\\*)(.|\s)*(\\*/)$", RegexOptions.Compiled);
             if (word_reg.IsMatch(lex))
             {
                 isValid = true;
