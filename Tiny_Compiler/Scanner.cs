@@ -10,7 +10,7 @@ public enum Token_Class
     END, ENDL, ELSE, ELSEIF, IF, INTEGER,
     READ, THEN, REPEAT, UNTIL, WRITE, RETURN, FLOAT, STRING, LessThan, GreaterThan, NotEqual,
     Plus, Minus, Multiply, Division, Equal,LeftBraces,RightBraces,
-    And, Or, Semicolon, Identifier,Assign,Comment, Comma, Dot, Number, String
+    And, Or, Semicolon, Identifier,Assign,Comment, Comma, Number, String
     , LeftParentheses, RightParentheses
 }
 namespace Tiny_Compiler

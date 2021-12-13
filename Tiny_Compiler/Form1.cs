@@ -17,10 +17,6 @@ namespace Tiny_Compiler
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
         void PrintTokens()
         {
             for (int i = 0; i < Tiny_Compiler.Tiny_Scanner.Tokens.Count; i++)
@@ -42,15 +38,25 @@ namespace Tiny_Compiler
                 textBox2.Text += Errors.Error_List[i];
                 textBox2.Text += "\r\n";
             }
+
+            for (int i = 0; i < Errors.Parser_Error_List.Count; i++)
+            {                
+                textBox3.Text += Errors.Parser_Error_List[i];               
+            }
         }
 
         private void button_Click_1(object sender, EventArgs e)
         {
             string code = textBox1.Text;
+
             Tiny_Compiler.TokenStream.Clear();
+            treeView1.Nodes.Clear();
             Errors.Error_List.Clear();
+            Errors.Parser_Error_List.Clear();
             Tiny_Compiler.Start_Compiling(code);
+
             PrintTokens();
+            treeView1.Nodes.Add(Parser.PrintParseTree(Tiny_Compiler.tree_Root));
             PrintErrors();
         }
 
@@ -58,28 +64,11 @@ namespace Tiny_Compiler
         {
             dataGridView1.DataSource = null;
             Errors.Error_List.Clear();
+            Errors.Parser_Error_List.Clear();
             Tiny_Compiler.TokenStream.Clear();
             dataGridView1.Rows.Clear();
+            treeView1.Nodes.Clear();
             textBox2.Clear();
-
         }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-
-        
     }
 }
