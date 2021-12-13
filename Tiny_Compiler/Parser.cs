@@ -48,7 +48,123 @@ namespace Tiny_Compiler
             
             return block;
         }        
+        Node Term()
+        {
+            Node term = new Node("term");
+            if (Token_Class.Number == TokenStream[InputPointer].token_type)
+            {
+                term.Children.Add(match(Token_Class.Number));
+            }
+            else if(Token_Class.Identifier == TokenStream[InputPointer].token_type)
+            {
+                term.Children.Add(match(Token_Class.Identifier));
+            }
+            else
+            {
+                term.Children.Add(Function_Call());
+            }
+            return term;
+        }
+        Node Function_Call()
+        {
+            Node fn_call = new Node("function call");
+            fn_call.Children.Add(match(Token_Class.Identifier));
+            fn_call.Children.Add(match(Token_Class.LeftParentheses));
+            fn_call.Children.Add(ArgList());
+            fn_call.Children.Add(match(Token_Class.RightParentheses));
+            return fn_call;
+        }
+        Node ArgList()
+        {
+            Node arglist = new Node("arglist");
+            arglist.Children.Add(match(Token_Class.Identifier));
+            arglist.Children.Add(Arguments());
+            return arglist;
+        }
+        Node Arguments()
+        {
+            Node arguments = new Node("arguments");
+            if(Token_Class.Comma == TokenStream[InputPointer].token_type)
+            {
+                arguments.Children.Add(match(Token_Class.Comma));
+                arguments.Children.Add(ArgList());
+                return arguments;
+            }
+            
+            return null;
+        }
+        Node Expression()
+        {
+            Node expression = new Node("expression");
+            if(Token_Class.Comma == TokenStream[InputPointer].token_type)
+            {
+                expression.Children.Add(match(Token_Class.String));
+            }
+            
+            //expression.Children.Add(Term());
+            //expression.Children.Add(Equation());
+            return expression;
+        }
+       Node Assignment_Statement()
+        {
+            Node assign = new Node("assignment statement");
+            assign.Children.Add(match(Token_Class.Identifier));
+            assign.Children.Add(match(Token_Class.Assign));
+            assign.Children.Add(Expression());
+            return assign;
+        }
+        Node Datatype()
+        {
+            Node dt = new Node("datatype");
+            if (Token_Class.INTEGER == TokenStream[InputPointer].token_type)
+            {
+                dt.Children.Add(match(Token_Class.INTEGER));
+            }
+            else if (Token_Class.FLOAT == TokenStream[InputPointer].token_type)
+            {
+                dt.Children.Add(match(Token_Class.FLOAT));
+            }
+            else if (Token_Class.STRING == TokenStream[InputPointer].token_type)
+            {
+                dt.Children.Add(match(Token_Class.STRING));
+            }
+            return dt;
+        }
 
+        Node Write_Statement()
+        {
+            Node write_statement = new Node("write statement");
+            write_statement.Children.Add(match(Token_Class.WRITE));
+            write_statement.Children.Add(Expression());
+            write_statement.Children.Add(Endline());
+            return write_statement;
+        }
+        Node Endline()
+        {
+            Node el = new Node("endline");
+            if(Token_Class.ENDL == TokenStream[InputPointer].token_type)
+            {
+                el.Children.Add(match(Token_Class.ENDL));
+                return el;
+            }
+            return null;           
+        }
+        Node Read_Statement()
+        {
+            Node read_statement = new Node("read statement");
+            read_statement.Children.Add(match(Token_Class.READ));
+            read_statement.Children.Add(match(Token_Class.Identifier));
+            read_statement.Children.Add(match(Token_Class.Semicolon));
+            return read_statement;
+        }
+        Node Return_Statement()
+        {
+            Node return_statement = new Node("return statement");
+            return_statement.Children.Add(match(Token_Class.RETURN));
+            return_statement.Children.Add(Expression());
+            return_statement.Children.Add(match(Token_Class.Semicolon));
+            return return_statement;
+        }
         public Node match(Token_Class ExpectedToken)
         {
 
