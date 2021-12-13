@@ -45,9 +45,19 @@ namespace Tiny_Compiler
         Node Block()
         {
             Node block = new Node("block");
-            
+            block.Children.Add(Statements());
             return block;
-        }        
+        }  
+        Node Statements()
+        {
+            Node statement = new Node("statement");
+            if(TokenStream[InputPointer].token_type == Token_Class.Identifier)
+            {
+                statement.Children.Add(Assignment_Statement());
+                return statement;
+            }
+            return null;
+        }
         Node Term()
         {
             Node term = new Node("term");
@@ -77,9 +87,13 @@ namespace Tiny_Compiler
         Node ArgList()
         {
             Node arglist = new Node("arglist");
-            arglist.Children.Add(match(Token_Class.Identifier));
-            arglist.Children.Add(Arguments());
-            return arglist;
+            if(TokenStream[InputPointer].token_type == Token_Class.Identifier)
+            {
+                arglist.Children.Add(match(Token_Class.Identifier));
+                arglist.Children.Add(Arguments());
+                return arglist;
+            }
+            return null;
         }
         Node Arguments()
         {
