@@ -62,3 +62,14 @@ C:\Users\pop\Documents\GitHub\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compile
 C:\Users\pop\Documents\GitHub\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.csproj.CoreCompileInputs.cache
 C:\Users\pop\Documents\GitHub\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.exe
 C:\Users\pop\Documents\GitHub\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.pdb
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\bin\Debug\Tiny_Compiler.exe.config
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\bin\Debug\Tiny_Compiler.exe
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\bin\Debug\Tiny_Compiler.pdb
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.csproj.AssemblyReference.cache
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.Form1.resources
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.Form2.resources
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.Properties.Resources.resources
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.csproj.GenerateResource.cache
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.csproj.CoreCompileInputs.cache
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.exe
+C:\Users\Hany\OneDrive\Desktop\Tiny-Compiler\Tiny-Compiler\Tiny_Compiler\obj\Debug\Tiny_Compiler.pdb

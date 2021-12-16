@@ -24,30 +24,163 @@ namespace Tiny_Compiler
         Node Program()
         {
             Node program = new Node("Program");
-            program.Children.Add(Header());
-            program.Children.Add(DeclSec());
-            program.Children.Add(Block());            
+            program.Children.Add(Function_state());
+            program.Children.Add(Main_Function());          
             return program;
         }
 
-        Node Header()
+        Node Function_state()
         {
-            Node header = new Node("Header");
-            
-            return header;
+            Node Function_stat = new Node("Function_state");
+            if (TokenStream[InputPointer].token_type == Token_Class.INTEGER)
+            {
+                Function_stat.Children.Add(Function_Statement());
+                Function_stat.Children.Add(Function_state());
+                return Function_stat;
+            }
+                return null;
         }
-        Node DeclSec()
+        Node Function_Statement()
         {
-            Node declsec = new Node("DeclSec");
-            
-            return declsec;
+            Node Function_Statement_node = new Node("Function_Statement");
+           
+                Function_Statement_node.Children.Add(Function_Declaration());
+                Function_Statement_node.Children.Add(Function_Body());
+                return Function_Statement_node;
         }
-        Node Block()
+
+        Node Main_Function()
         {
-            Node block = new Node("block");
-            block.Children.Add(Statements());
-            return block;
-        }  
+            Node Main_Function_node = new Node("Main_Function");
+            Main_Function_node.Children.Add(Datatype());
+            Main_Function_node.Children.Add(match(Token_Class.main));
+            Main_Function_node.Children.Add(match(Token_Class.LeftBraces));
+            Main_Function_node.Children.Add(match(Token_Class.RightBraces));
+            Main_Function_node.Children.Add(Function_Body());
+            return Main_Function_node;
+
+        }
+
+        Node Function_Body()
+        {
+            Node Function_Body_node = new Node("Function_Body");
+            Function_Body_node.Children.Add(match(Token_Class.LeftParentheses));
+            Function_Body_node.Children.Add(States());
+            Function_Body_node.Children.Add(match(Token_Class.RightParentheses));
+            Function_Body_node.Children.Add(Return_Statement());
+            return Function_Body_node;
+
+        }
+        Node States()
+        {
+            Node States_node = new Node("States");
+            States_node.Children.Add(Statements());
+            States_node.Children.Add(States_second());
+            
+            return States_node;
+        }
+
+        Node States_second()
+        {
+            Node States_node = new Node("States_second");
+            if (TokenStream[InputPointer].token_type == Token_Class.IF ||
+                TokenStream[InputPointer].token_type == Token_Class.ELSEIF ||
+                TokenStream[InputPointer].token_type == Token_Class.READ ||
+                TokenStream[InputPointer].token_type == Token_Class.WRITE ||
+                TokenStream[InputPointer].token_type == Token_Class.REPEAT ||
+                TokenStream[InputPointer].token_type == Token_Class.Identifier ||
+                TokenStream[InputPointer].token_type == Token_Class.FLOAT ||
+                TokenStream[InputPointer].token_type == Token_Class.Division ||
+                TokenStream[InputPointer].token_type == Token_Class.RETURN)
+            {
+                States_node.Children.Add(Statements());
+                States_node.Children.Add(States_second());
+                return States_node;
+            }
+            return null;
+        }
+
+        Node Function_Declaration()
+        {
+            Node Function_Declaration_node = new Node("Function_Declaration");
+            Function_Declaration_node.Children.Add(Datatype());
+            Function_Declaration_node.Children.Add(match(Token_Class.Identifier));
+            Function_Declaration_node.Children.Add(Function_Declaration_second());
+            return Function_Declaration_node;
+
+        }
+        Node Function_Declaration_second()
+        {
+            Node Function_Declaration_second_node = new Node("Function_Declaration_second");
+            if (TokenStream[InputPointer].token_type == Token_Class.LeftParentheses)
+            {
+                Function_Declaration_second_node.Children.Add(match(Token_Class.LeftParentheses));
+                Function_Declaration_second_node.Children.Add(Function_Declaration_third());
+                Function_Declaration_second_node.Children.Add(match(Token_Class.RightParentheses));
+                return Function_Declaration_second_node;
+            }
+            return null;
+
+        }
+        Node Function_Declaration_third()
+        {
+            Node Function_Declaration_third_node = new Node("Function_Declaration_third");
+            Function_Declaration_third_node.Children.Add(Parameter());
+            Function_Declaration_third_node.Children.Add(Function_Declaration_fourth());
+            Function_Declaration_third_node.Children.Add(match(Token_Class.RightParentheses));
+            return Function_Declaration_third_node;
+
+        }
+        Node Function_Declaration_fourth()
+        {
+            Node Function_Declaration_fourth_node = new Node("Function_Declaration_fourth");
+            if (TokenStream[InputPointer].token_type == Token_Class.Comma)
+            {
+                Function_Declaration_fourth_node.Children.Add(match(Token_Class.Comma));
+                Function_Declaration_fourth_node.Children.Add(Function_Declaration_third());
+                return Function_Declaration_fourth_node;
+            }
+            return null;
+
+        }
+
+        Node Function_Name()
+        {
+            Node Function_Name_node = new Node("Function_Name");
+            Function_Name_node.Children.Add(match(Token_Class.Identifier));
+            return Function_Name_node;
+        }
+        Node Parameter()
+        {
+            Node Parameter_node = new Node("Parameter");
+            Parameter_node.Children.Add(Datatype());
+            Parameter_node.Children.Add(match(Token_Class.Identifier));
+            return Parameter_node;
+        }
+        Node Repeat_Statements()
+        {
+            Node Repeat_Statements_node = new Node("Repeat_Statements");
+            Repeat_Statements_node.Children.Add(Datatype());
+            Repeat_Statements_node.Children.Add(match(Token_Class.Identifier));
+            return Repeat_Statements_node;
+        }
+        Node Else_Statement()
+        {
+            Node Else_Statement_node = new Node("Else_Statement");
+            Else_Statement_node.Children.Add(match(Token_Class.REPEAT));
+            Else_Statement_node.Children.Add(Statements());
+            Else_Statement_node.Children.Add(match(Token_Class.UNTIL));
+            Else_Statement_node.Children.Add(Condition_Statement());
+            return Else_Statement_node;
+        }
+
+        Node Condition_Statement()
+        {
+            Node Condition_Statement_node = new Node("Condition_Statement");
+            return Condition_Statement_node;
+
+        }
+
         Node Statements()
         {
             Node statement = new Node("statement");
@@ -171,6 +304,7 @@ namespace Tiny_Compiler
             read_statement.Children.Add(match(Token_Class.Semicolon));
             return read_statement;
         }
+        
         Node Return_Statement()
         {
             Node return_statement = new Node("return statement");
@@ -179,6 +313,7 @@ namespace Tiny_Compiler
             return_statement.Children.Add(match(Token_Class.Semicolon));
             return return_statement;
         }
+        
         public Node match(Token_Class ExpectedToken)
         {
 
