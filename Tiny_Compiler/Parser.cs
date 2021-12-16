@@ -156,23 +156,26 @@ namespace Tiny_Compiler
             Parameter_node.Children.Add(Datatype());
             Parameter_node.Children.Add(match(Token_Class.Identifier));
             return Parameter_node;
+
         }
         Node Repeat_Statements()
         {
             Node Repeat_Statements_node = new Node("Repeat_Statements");
-            Repeat_Statements_node.Children.Add(Datatype());
-            Repeat_Statements_node.Children.Add(match(Token_Class.Identifier));
+            Repeat_Statements_node.Children.Add(match(Token_Class.REPEAT));
+            Repeat_Statements_node.Children.Add(Statements());
+            Repeat_Statements_node.Children.Add(match(Token_Class.UNTIL));
+            Repeat_Statements_node.Children.Add(Condition_Statement());
             return Repeat_Statements_node;
         }
         Node Else_Statement()
         {
             Node Else_Statement_node = new Node("Else_Statement");
-            Else_Statement_node.Children.Add(match(Token_Class.REPEAT));
+            Else_Statement_node.Children.Add(match(Token_Class.ELSE));
             Else_Statement_node.Children.Add(Statements());
-            Else_Statement_node.Children.Add(match(Token_Class.UNTIL));
-            Else_Statement_node.Children.Add(Condition_Statement());
+            Else_Statement_node.Children.Add(match(Token_Class.END));
             return Else_Statement_node;
         }
+       
 
         Node Condition_Statement()
         {
