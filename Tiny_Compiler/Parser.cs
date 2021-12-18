@@ -176,7 +176,11 @@ namespace Tiny_Compiler
             return Else_Statement_node;
         }
        
-
+        Node Condition()
+        {
+            Node condition = new Node("condition");
+            return condition;
+        }
         Node Condition_Statement()
         {
             Node Condition_Statement_node = new Node("Condition_Statement");
@@ -239,20 +243,29 @@ namespace Tiny_Compiler
                 arguments.Children.Add(match(Token_Class.Comma));
                 arguments.Children.Add(ArgList());
                 return arguments;
-            }
-            
+            }            
             return null;
+        }
+        Node Equation()
+        {
+            Node equation = new Node("equation");
+            return equation;
         }
         Node Expression()
         {
             Node expression = new Node("expression");
-            if(Token_Class.Comma == TokenStream[InputPointer].token_type)
+            if(Token_Class.STRING == TokenStream[InputPointer].token_type)
             {
                 expression.Children.Add(match(Token_Class.String));
             }
-            
-            //expression.Children.Add(Term());
-            //expression.Children.Add(Equation());
+           /*else if (Term() == TokenStream[InputPointer].token_type)
+            {
+                expression.Children.Add(Term());
+            }*/
+            else if (Token_Class.STRING == TokenStream[InputPointer].token_type)
+            {
+                expression.Children.Add(Equation());
+            }            
             return expression;
         }
        Node Assignment_Statement()
@@ -283,11 +296,11 @@ namespace Tiny_Compiler
 
         Node Write_Statement()
         {
-            Node write_statement = new Node("write statement");
-            write_statement.Children.Add(match(Token_Class.WRITE));
-            write_statement.Children.Add(Expression());
-            write_statement.Children.Add(Endline());
-            return write_statement;
+            Node write_state = new Node("write statement");
+            write_state.Children.Add(match(Token_Class.WRITE));
+            write_state.Children.Add(Expression());
+            write_state.Children.Add(Endline());            
+            return write_state;
         }
         Node Endline()
         {
@@ -345,7 +358,15 @@ namespace Tiny_Compiler
                 return null;
             }
         }
+        Node Token_To_Node(Token_Class tc)
+        {
+            Node converted_Node = new Node("converted_node");
+            if (tc == TokenStream[InputPointer].token_type)
+            {
 
+            }
+            return converted_Node;
+        }
         public static TreeNode PrintParseTree(Node root)
         {
             TreeNode tree = new TreeNode("Parse Tree");
