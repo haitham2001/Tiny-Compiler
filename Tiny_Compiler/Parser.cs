@@ -175,15 +175,53 @@ namespace Tiny_Compiler
             Else_Statement_node.Children.Add(match(Token_Class.END));
             return Else_Statement_node;
         }
-       
+        Node if_Statement()
+        {
+            Node if_Statement_node = new Node("if_Statement");
+            if (TokenStream[InputPointer].token_type == Token_Class.IF)
+            {
+                if_Statement_node.Children.Add(match(Token_Class.IF));
+                if_Statement_node.Children.Add(match(Token_Class.LeftParentheses));
+                if_Statement_node.Children.Add(Condition_Statement());
+                if_Statement_node.Children.Add(match(Token_Class.RightParentheses));
+                if_Statement_node.Children.Add(match(Token_Class.THEN));
+                if_Statement_node.Children.Add(Statements());
+                if_Statement_node.Children.Add(Else_if_statement());
+                if_Statement_node.Children.Add(Else_Statement());
+                if_Statement_node.Children.Add(match(Token_Class.END));
+            }
+            return if_Statement_node;
+        }
+        Node Else_if_statement()
+        {
+            Node else_if_statement = new Node("else_if_condition");
+            if (TokenStream[InputPointer].token_type == Token_Class.ELSEIF)
+            {
+                else_if_statement.Children.Add(match(Token_Class.ELSEIF));
+                else_if_statement.Children.Add(match(Token_Class.LeftParentheses));
+                else_if_statement.Children.Add(Condition_Statement());
+                else_if_statement.Children.Add(match(Token_Class.RightParentheses));
+                else_if_statement.Children.Add(match(Token_Class.THEN));
+                else_if_statement.Children.Add(Statements());
+                else_if_statement.Children.Add(Else_if_statement());
+                else_if_statement.Children.Add(Else_Statement());
+                else_if_statement.Children.Add(match(Token_Class.END));
+            }
+                return else_if_statement;
+        }
         Node Condition()
         {
             Node condition = new Node("condition");
+           
             return condition;
         }
         Node Condition_Statement()
         {
             Node Condition_Statement_node = new Node("Condition_Statement");
+            Condition_Statement_node.Children.Add(Condition());
+            //Condition_Statement_node.Children.Add(match(Token_Class.And));
+            //Condition_Statement_node.Children.Add(match(Token_Class.Or));
+            Condition_Statement_node.Children.Add(Condition());
             return Condition_Statement_node;
 
         }
