@@ -11,6 +11,7 @@ namespace Tiny_Compiler
     {
         int InputPointer = 0;
         List<Token> TokenStream;
+
         public Node root;
 
         public Node StartParsing(List<Token> TokenStream)
@@ -47,6 +48,10 @@ namespace Tiny_Compiler
             {
                 statement.Children.Add(Return_Statement());
             }
+            else if (TokenStream[InputPointer].token_type == Token_Class.REPEAT)
+            {
+                statement.Children.Add(Repeat_Statements());
+            }
             else if (TokenStream[InputPointer].token_type == Token_Class.READ)
             {
                 statement.Children.Add(Read_Statement());
@@ -67,31 +72,33 @@ namespace Tiny_Compiler
             {
                 statement.Children.Add(Datatype());
             }
+            else
+            {
+                return null;
+            }
             return statement;
         }
         Node Program()
         {
             Node program = new Node("Program");
-            program.Children.Add(Function_state());
+            program.Children.Add(User_Function());
             program.Children.Add(Main_Function());          
             return program;
         }
 
-        Node Function_state()
+        Node User_Function()
         {
-            Node Function_stat = new Node("Function_state");
+            bool is_found = false;
+            Node user_function = new Node("User_Function");
             if (InputPointer + 1 < TokenStream.Count)
             {
-                if (TokenStream[InputPointer + 1].token_type == Token_Class.INTEGER)
-                {
-                    Function_stat.Children.Add(Function_Statement());
-                    Function_stat.Children.Add(Function_state());
-                    return Function_stat;
+                while (TokenStream[InputPointer + 1].token_type == Token_Class.Identifier) {
+                    user_function.Children.Add(Function_Statement());
                 }
-                else
-                    return null;
+                
+                return user_function;
             }
-            return Function_stat;
+            return user_function;
         }
         Node Function_Statement()
         {
@@ -103,17 +110,14 @@ namespace Tiny_Compiler
 
         Node Main_Function()
         {
-            if (InputPointer < TokenStream.Count)
-            {
-                Node Main_Function_node = new Node("Main_Function");
-                Main_Function_node.Children.Add(Datatype());
-                Main_Function_node.Children.Add(match(Token_Class.main));
-                Main_Function_node.Children.Add(match(Token_Class.LeftParentheses));
-                Main_Function_node.Children.Add(match(Token_Class.RightParentheses));
-                Main_Function_node.Children.Add(Function_Body());
-                return Main_Function_node;
-            }
-            return null;
+            Node Main_Function_node = new Node("Main_Function");
+            Main_Function_node.Children.Add(Datatype());
+            Main_Function_node.Children.Add(match(Token_Class.main));
+            Main_Function_node.Children.Add(match(Token_Class.LeftParentheses));
+            Main_Function_node.Children.Add(match(Token_Class.RightParentheses));
+            Main_Function_node.Children.Add(Function_Body());
+            return Main_Function_node;
+            
         }
 
         Node Function_Body()
@@ -141,8 +145,13 @@ namespace Tiny_Compiler
             Node states_repeat = new Node("state_repeatition");
             if (InputPointer < TokenStream.Count && Is_Statement(InputPointer))
             {
+                int temp = InputPointer;
                 states_repeat.Children.Add(Statements());
-                states_repeat.Children.Add(States_Repeatition());
+                if (temp != InputPointer)
+                {
+                    states_repeat.Children.Add(States_Repeatition());
+                }
+                
                 return states_repeat;
             }
             return null;            
