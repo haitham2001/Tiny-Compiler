@@ -65,7 +65,8 @@ namespace Tiny_Compiler
             dataGridView1.DataSource = null;
             Errors.Error_List.Clear();
             Errors.Parser_Error_List.Clear();
-            Tiny_Compiler.TokenStream.Clear();
+           // Tiny_Compiler.TokenStream.Clear();
+            Tiny_Compiler.tokenStream.Clear();
             dataGridView1.Rows.Clear();
             treeView1.Nodes.Clear();
             textBox2.Clear();

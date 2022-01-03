@@ -12,6 +12,7 @@ namespace Tiny_Compiler
         public static Scanner Tiny_Scanner = new Scanner();
         public static Parser Tiny_Parser = new Parser();       
         public static List<Token> TokenStream = new List<Token>();
+        public static List<Token> tokenStream = new List<Token>();
         public static Node tree_Root;
 
         public static void Start_Compiling(string SourceCode) //character by character
@@ -19,7 +20,15 @@ namespace Tiny_Compiler
             //Scanner
             Tiny_Scanner.StartScanning(SourceCode);
             //Parser
-            Tiny_Parser.StartParsing(TokenStream);
+            for (int i = 0; i < TokenStream.Count; i++)
+            {
+                if (!(TokenStream[i].token_type == Token_Class.Comment))
+                {
+                    tokenStream.Add(TokenStream[i]);
+
+                }  
+            }
+            Tiny_Parser.StartParsing(tokenStream);
             tree_Root = Tiny_Parser.root;
             //Sematic Analysis
         }

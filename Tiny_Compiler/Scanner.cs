@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 public enum Token_Class
 {
     END, ENDL, ELSE, ELSEIF, IF, INTEGER,main,
-    READ, THEN, REPEAT, UNTIL, WRITE, RETURN, FLOAT, STRING, LessThan, GreaterThan, NotEqual,
+    READ, THEN, REPEAT, UNTIL, WRITE, RETURN, FLOAT, STRING,LessThan, GreaterThan, NotEqual,
     Plus, Minus, Multiply, Division, Equal,LeftBraces,RightBraces,
     And, Or, Semicolon, Identifier,Assign,Comment, Comma, Number, String
     , LeftParentheses, RightParentheses
