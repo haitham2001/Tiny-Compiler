@@ -56,7 +56,7 @@
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(263, 350);
-            this.dataGridView1.TabIndex = 10;            
+            this.dataGridView1.TabIndex = 10;
             // 
             // Column1
             // 
@@ -91,7 +91,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox2.Size = new System.Drawing.Size(628, 93);
-            this.textBox2.TabIndex = 8;           
+            this.textBox2.TabIndex = 8;
             // 
             // textBox1
             // 
@@ -101,7 +101,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(354, 340);
-            this.textBox1.TabIndex = 7;           
+            this.textBox1.TabIndex = 7;
             // 
             // button2
             // 
@@ -121,7 +121,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 15);
             this.label2.TabIndex = 12;
-            this.label2.Text = "Error List";            
+            this.label2.Text = "Error List";
             // 
             // label1
             // 
@@ -131,7 +131,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 15);
             this.label1.TabIndex = 11;
-            this.label1.Text = "Tiny Code";            
+            this.label1.Text = "Tiny Code";
             // 
             // treeView1
             // 
@@ -158,6 +158,7 @@
             this.textBox3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox3.Size = new System.Drawing.Size(349, 119);
             this.textBox3.TabIndex = 16;
+            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // label4
             // 
