@@ -77,5 +77,10 @@ namespace Tiny_Compiler
         {
 
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
